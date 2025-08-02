@@ -8,7 +8,7 @@ const Card = () => {
       <section>
         <h2>Title: Demo</h2>
         <div>
-          <p>discription</p>
+          <p>discription: checking the ai commits</p>
         </div>
         <div>
           <button>tags</button>
