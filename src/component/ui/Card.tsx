@@ -5,7 +5,7 @@ const Card = () => {
         <h3>Demo Heading</h3>
       </header>
 
-      <body>
+      <section>
         <h2>Title</h2>
         <div>
           <p>discription</p>
@@ -14,7 +14,7 @@ const Card = () => {
           <button>tags</button>
         </div>
         <div>added on date</div>
-      </body>
+      </section>
     </div>
   );
 };

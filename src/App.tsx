@@ -1,4 +1,4 @@
-import "./App.css";
+import "./index.css";
 import BrainiIcon from "./assets/BrainIcon";
 import Button from "./component/ui/Button";
 import Card from "./component/ui/Card";
