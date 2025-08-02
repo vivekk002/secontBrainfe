@@ -6,7 +6,7 @@ const Card = () => {
       </header>
 
       <section>
-        <h2>Title</h2>
+        <h2>Title: Demo</h2>
         <div>
           <p>discription</p>
         </div>
