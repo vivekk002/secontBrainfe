@@ -19,7 +19,7 @@ const Reddit = ({ url }: RedditProps) => {
   return (
     <div className="reddit-embed h-full">
       <iframe
-        className="w-full h-full rounded-3xl"
+        className="h-full rounded-3xl"
         src={getEmbedUrl(url)}
         title="Reddit post"
         style={{ border: "none" }}

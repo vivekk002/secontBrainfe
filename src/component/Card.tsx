@@ -7,12 +7,8 @@ import Toast from "./Toast";
 import "../index.css";
 
 import Twitter from "../embeds/Twitter";
-import Instagram from "../embeds/Instagram";
-import Facebook from "../embeds/Facebook";
-import LinkedIn from "../embeds/LinkedIn";
-import Threads from "../embeds/Threads";
 import Reddit from "../embeds/Reddit";
-import Medium from "../embeds/Medium";
+
 import Pinterest from "../embeds/Pinterest";
 import Spotify from "../embeds/Spotify";
 import Youtube from "../embeds/Youtube";
@@ -21,17 +17,7 @@ interface CardProps {
   title: string;
   createdAt: string;
   link: string;
-  contentType:
-    | "youtube"
-    | "twitter"
-    | "instagram"
-    | "facebook"
-    | "linkedin"
-    | "threads"
-    | "reddit"
-    | "medium"
-    | "pinterest"
-    | "spotify";
+  contentType: "youtube" | "twitter" | "reddit" | "pinterest" | "spotify";
   _id?: string; // Add content ID for sharing
   onDelete?: () => void; // Callback for when content is deleted
 }
@@ -60,6 +46,7 @@ const Card = ({
     try {
       const shareLink = await shareContent(_id, link);
       if (shareLink) {
+        copyToClipboard(shareLink);
         showToast("Content shared successfully!", "success");
       } else {
         showToast("Failed to share content", "error");
@@ -104,22 +91,8 @@ const Card = ({
       case "youtube":
         return <Youtube url={link} />;
 
-      case "instagram":
-        return <Instagram url={link} />;
-
-      case "facebook":
-        return <Facebook url={link} />;
-
-      case "linkedin":
-        return <LinkedIn url={link} />;
-
-      case "threads":
-        return <Threads url={link} />;
-
       case "reddit":
         return <Reddit url={link} />;
-      case "medium":
-        return <Medium url={link} />;
 
       case "pinterest":
         return <Pinterest url={link} />;
@@ -172,8 +145,8 @@ const Card = ({
           </div>
         </header>
 
-        <section className="flex-1 min-h-0">
-          <div className="h-full">{renderContent()}</div>
+        <section className="flex-1 ">
+          <div className="h-[400px] ">{renderContent()}</div>
         </section>
       </div>
       <footer className=" ml-2">

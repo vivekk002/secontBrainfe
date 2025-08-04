@@ -22,13 +22,9 @@ interface OptionsType {
 
 const dropdownOptions = [
   { label: "YouTube", value: "youtube" },
-  { label: "Twitter", value: "twitter" },
-  { label: "Instagram", value: "instagram" },
-  { label: "Facebook", value: "facebook" },
-  { label: "LinkedIn", value: "linkedin" },
   { label: "Threads", value: "threads" },
   { label: "Reddit", value: "reddit" },
-  { label: "Medium", value: "medium" },
+
   { label: "Pinterest", value: "pinterest" },
   { label: "Spotify", value: "spotify" },
 ];
