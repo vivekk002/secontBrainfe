@@ -44,7 +44,7 @@ const Card = ({
 
     setIsSharing(true);
     try {
-      const shareLink = await shareContent(_id, link);
+      const shareLink = await shareContent(_id);
       if (shareLink) {
         copyToClipboard(shareLink);
         showToast("Content shared successfully!", "success");
