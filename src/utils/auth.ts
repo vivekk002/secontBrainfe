@@ -27,9 +27,15 @@ export const logout = async () => {
   }
 };
 
+interface propTypes {
+  name: string;
+  jwt: string;
+}
+
 // Login function
-export const login = (token: string) => {
-  localStorage.setItem("token", token);
+export const login = ({ jwt, name }: propTypes) => {
+  localStorage.setItem("token", jwt);
+  localStorage.setItem("user", name);
   // Dispatch a custom event to notify components about the login
   window.dispatchEvent(
     new CustomEvent("authStateChanged", { detail: { isAuthenticated: true } })

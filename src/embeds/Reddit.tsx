@@ -6,8 +6,6 @@ interface RedditProps {
 }
 
 const Reddit = ({ url }: RedditProps) => {
-  console.log("reddit link", url);
-
   const getEmbedUrl = (redditUrl: string) => {
     // Reddit embed URL format
     return (

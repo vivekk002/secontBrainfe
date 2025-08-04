@@ -6,8 +6,6 @@ interface SpotifyProps {
 }
 
 const Spotify = ({ url }: SpotifyProps) => {
-  console.log("spotify link", url);
-
   const getEmbedUrl = (spotifyUrl: string) => {
     // Convert Spotify URL to embed format
     if (spotifyUrl.includes("spotify.com/")) {

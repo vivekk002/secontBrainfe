@@ -5,6 +5,7 @@ import SettingsIcon from "../icons/SettingsIcon";
 import { useAuth } from "../hooks/useAuth";
 
 const UserProfileDropdown = () => {
+  const name = localStorage.getItem("name");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { logout } = useAuth();
@@ -43,7 +44,7 @@ const UserProfileDropdown = () => {
         onClick={handleProfileClick}
       >
         <ProfileIcon size="lg" />
-        <span>User Profile</span>
+        <span>Profile</span>
         {/* Dropdown Arrow */}
         <svg
           className={`w-4 h-4 ml-auto transition-transform duration-200 ${
@@ -72,7 +73,9 @@ const UserProfileDropdown = () => {
                 <span className="text-white text-sm font-medium">U</span>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">User</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {name && name.toUpperCase()}
+                </p>
                 <p className="text-xs text-gray-500">user@example.com</p>
               </div>
             </div>

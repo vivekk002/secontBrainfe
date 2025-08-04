@@ -25,7 +25,8 @@ const SingIn = () => {
         password: passwordRef.current?.value,
       });
       const jwt = response.data.token;
-      login(jwt);
+      const name = response.data.name;
+      login({ jwt, name });
 
       showToast("Sign In successful!", "success");
       refreshAuth();
