@@ -1,1 +1,4 @@
-export const BACKEND_URL = "http://localhost:3000/api/v1";
+import dotenv from "dotenv";
+dotenv.config;
+
+export const BACKEND_URL = process.env.VITE_API_URL;
