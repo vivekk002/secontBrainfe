@@ -5,7 +5,8 @@ import SettingsIcon from "../icons/SettingsIcon";
 import { useAuth } from "../hooks/useAuth";
 
 const UserProfileDropdown = () => {
-  const name = localStorage.getItem("name");
+  const name = localStorage.getItem("user");
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { logout } = useAuth();
@@ -70,13 +71,14 @@ const UserProfileDropdown = () => {
           <div className="p-3 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">U</span>
+                <span className="text-white text-sm font-medium">
+                  {name && name.charAt(0).toUpperCase()}
+                </span>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">
                   {name && name.toUpperCase()}
                 </p>
-                <p className="text-xs text-gray-500">user@example.com</p>
               </div>
             </div>
           </div>
