@@ -28,7 +28,7 @@ const SingIn = () => {
       login(jwt);
 
       showToast("Sign In successful!", "success");
-      refreshAuth;
+      refreshAuth();
       setLoading(false);
 
       // Navigate to dashboard
@@ -36,7 +36,8 @@ const SingIn = () => {
 
       // Handle success (e.g., redirect, show success message)
     } catch (error: string | any) {
-      showToast(error.response.data.error, "error");
+      console.log("error", error);
+      // showToast(error.response.data.error, "error");
       setLoading(false);
       // Handle error (e.g., show error message)
     }
