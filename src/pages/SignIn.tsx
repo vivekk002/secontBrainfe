@@ -6,14 +6,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "../component/Toast";
 import { useToast } from "../hooks/useToast";
-import { useAuth } from "../hooks/useAuth";
+
 import { login } from "../utils/auth";
 
 const SingIn = () => {
   const navigate = useNavigate();
   const [Loading, setLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
-  const { refreshAuth } = useAuth();
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -29,7 +28,7 @@ const SingIn = () => {
       login({ jwt, name });
 
       showToast("Sign In successful!", "success");
-      refreshAuth();
+
       setLoading(false);
 
       // Navigate to dashboard
