@@ -16,12 +16,12 @@ const LinkedIn = ({ url }: LinkedInProps) => {
   };
 
   return (
-    <div className="linkedin-embed">
+    <div className="linkedin-embed h-full">
       <iframe
-        className="p-3 w-full h-96 rounded-3xl border-0"
+        className="w-full h-full rounded-3xl"
         src={getEmbedUrl(url)}
         title="LinkedIn post"
-        frameBorder="0"
+        style={{ border: "none" }}
         allowFullScreen
         scrolling="no"
       />

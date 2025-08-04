@@ -16,12 +16,12 @@ const Pinterest = ({ url }: PinterestProps) => {
   };
 
   return (
-    <div className="pinterest-embed">
+    <div className="pinterest-embed h-full">
       <iframe
-        className="p-3 w-full h-96 rounded-3xl border-0"
+        className="w-full h-full rounded-3xl"
         src={getEmbedUrl(url)}
         title="Pinterest pin"
-        frameBorder="0"
+        style={{ border: "none" }}
         scrolling="no"
         allowFullScreen
       />

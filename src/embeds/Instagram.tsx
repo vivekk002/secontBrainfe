@@ -16,12 +16,12 @@ const Instagram = ({ url }: InstagramProps) => {
   };
 
   return (
-    <div className="instagram-embed">
+    <div className="instagram-embed h-full">
       <iframe
-        className="p-3 w-full h-96 rounded-3xl border-0"
+        className="w-full h-full rounded-3xl"
         src={getEmbedUrl(url)}
         title="Instagram post"
-        frameBorder="0"
+        style={{ border: "none" }}
         scrolling="no"
         allowTransparency={true}
       />

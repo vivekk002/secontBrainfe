@@ -12,6 +12,7 @@ type PropsType = {
   // or your appropriate type
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onContentAdded?: () => void;
 };
 
 interface OptionsType {
@@ -32,13 +33,12 @@ const dropdownOptions = [
   { label: "Spotify", value: "spotify" },
 ];
 
-const AddContentDia = ({ open, setOpen }: PropsType) => {
+const AddContentDia = ({ open, setOpen, onContentAdded }: PropsType) => {
   const [Loading, setLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const [optionType, setOptionType] = useState<OptionsType | null>(null);
   const titleref = useRef<HTMLInputElement>(null);
   const linkref = useRef<HTMLInputElement>(null);
-  const token = localStorage.getItem("token");
   const handleSelect = (option: OptionsType) => {
     setOptionType(option);
   };
@@ -54,21 +54,17 @@ const AddContentDia = ({ open, setOpen }: PropsType) => {
     }
     setLoading(true);
     try {
-      await axios.post(
-        `${BACKEND_URL}/content`,
-        {
-          title,
-          link,
-          contentType,
-        },
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      await axios.post(`${BACKEND_URL}/content`, {
+        title,
+        link,
+        contentType,
+      });
       showToast("Content added successfully", "success");
       setOpen(false);
+      // Trigger content refresh
+      if (onContentAdded) {
+        onContentAdded();
+      }
     } catch (e) {
       console.log("error", e);
       setLoading(false);

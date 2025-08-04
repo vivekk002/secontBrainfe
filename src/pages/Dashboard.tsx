@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../component/SiderBar";
 import AddContentDia from "../component/AddContentDia";
+import ShareModal from "../component/ShareModal";
 import Button from "../component/Button";
 import ShareIcon from "../icons/ShareIcon";
 import PlusIcon from "../icons/PlusIcon";
@@ -8,32 +9,26 @@ import Card from "../component/Card";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 
-const token = localStorage.getItem("token");
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${BACKEND_URL}/content`,
+  const fetchContent = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/content`);
+      setContent(response.data.contents);
+      setLoading(false);
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setLoading(false);
-        setContent(response.data.contents);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+  useEffect(() => {
+    fetchContent();
   }, []);
   if (loading) {
     return <div>Loading...</div>;
@@ -45,7 +40,12 @@ const Dashboard = () => {
     <div className="flex h-screen">
       {/* Sidebar */}
       <Sidebar />
-      <AddContentDia open={open} setOpen={setOpen} />
+      <AddContentDia
+        open={open}
+        setOpen={setOpen}
+        onContentAdded={fetchContent}
+      />
+      <ShareModal open={shareModalOpen} setOpen={setShareModalOpen} />
       {/* Main Content Area */}
       <div className="w-[78%] bg-gray-50 flex flex-col">
         {/* Header */}
@@ -59,6 +59,7 @@ const Dashboard = () => {
               variant="secondary"
               label="Share Brain"
               startIcon={<ShareIcon size="lg" />}
+              onClick={() => setShareModalOpen(true)}
             />
             <Button
               className="cursor-pointer"
@@ -81,7 +82,9 @@ const Dashboard = () => {
               title={item.title}
               link={item.link}
               key={item._id}
+              _id={item._id}
               createdAt={item.createdAt}
+              onDelete={fetchContent}
             />
           ))}
         </section>

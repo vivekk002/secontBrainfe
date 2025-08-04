@@ -19,13 +19,13 @@ const Spotify = ({ url }: SpotifyProps) => {
   };
 
   return (
-    <div className="spotify-embed">
+    <div className="spotify-embed h-full flex items-center justify-center">
       <iframe
-        className="p-3 w-full rounded-3xl"
+        className="w-full rounded-3xl"
         src={getEmbedUrl(url)}
         width="100%"
         height="232"
-        frameBorder="0"
+        style={{ border: "none" }}
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
         title="Spotify player"

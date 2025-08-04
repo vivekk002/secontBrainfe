@@ -2,10 +2,10 @@ import BrainiIcon from "../icons/BrainIcon";
 import DocumentIcon from "../icons/DocumentIcon";
 import HashIcon from "../icons/HashIcon";
 import LinkIcon from "../icons/LinkIcon";
-import ProfileIcon from "../icons/ProfileIcon";
 import TwitterIcon from "../icons/TwitterIcon";
 import YoutubeIcon from "../icons/YoutubeIcon";
 import SideBarItems from "./SideBarItems";
+import UserProfileDropdown from "./UserProfileDropdown";
 
 const Sidebar = () => {
   return (
@@ -24,7 +24,7 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="h-[15%] items-center p-5 bg-gray-50">
-        <SideBarItems icon={<ProfileIcon size="lg" />} text={"User Profile"} />
+        <UserProfileDropdown />
       </div>
     </div>
   );

@@ -8,8 +8,8 @@ interface ThreadsProps {
 const Threads = ({ url }: ThreadsProps) => {
   // Threads doesn't have official embed API yet, so we'll create a preview card
   return (
-    <div className="threads-embed">
-      <div className="bg-gradient-to-r from-purple-400 to-pink-400 p-4 rounded-3xl text-white">
+    <div className="threads-embed h-full">
+      <div className="bg-gradient-to-r from-purple-400 to-pink-400 p-4 rounded-3xl text-white h-full flex flex-col justify-center">
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
             <span className="text-purple-600 font-bold text-lg">@</span>

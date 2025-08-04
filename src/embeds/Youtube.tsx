@@ -5,27 +5,39 @@ interface Props {
 }
 const Youtube = ({ url }: Props) => {
   const getEmbedUrl = (videoUrl: string) => {
+    let videoId = "";
+
+    // Handle different YouTube URL formats
     if (videoUrl.includes("watch?v=")) {
-      return videoUrl.replace("watch?v=", "embed/");
+      videoId = videoUrl.split("watch?v=")[1].split("&")[0];
     } else if (videoUrl.includes("youtu.be/")) {
-      return videoUrl.replace("youtu.be/", "youtube.com/embed/");
+      videoId = videoUrl.split("youtu.be/")[1].split("?")[0];
     } else if (videoUrl.includes("youtube.com/shorts/")) {
-      const videoId = videoUrl.split("/shorts/")[1].split("?")[0];
+      videoId = videoUrl.split("/shorts/")[1].split("?")[0];
+    } else if (videoUrl.includes("youtube.com/embed/")) {
+      // Already an embed URL
+      return videoUrl;
+    }
+
+    if (videoId) {
       return `https://www.youtube.com/embed/${videoId}`;
     }
+
     return videoUrl;
   };
 
   return (
-    <iframe
-      className="p-3 w-full rounded-3xl"
-      src={getEmbedUrl(url)}
-      title="YouTube video player"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerPolicy="strict-origin-when-cross-origin"
-      allowFullScreen
-    ></iframe>
+    <div className="youtube-embed h-full">
+      <iframe
+        className="w-full h-full rounded-3xl"
+        src={getEmbedUrl(url)}
+        title="YouTube video player"
+        style={{ border: "none" }}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      ></iframe>
+    </div>
   );
 };
 

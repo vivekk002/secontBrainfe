@@ -19,6 +19,7 @@ export const TrashIcon = (props: iconProps) => {
       strokeWidth="1.5"
       stroke="currentColor"
       className={`${sizeClasses[props.size]} ${props.className}`}
+      onClick={props.onClick}
     >
       <path
         strokeLinecap="round"

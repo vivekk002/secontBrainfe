@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "../component/Toast";
 import { useToast } from "../hooks/useToast";
+import { login } from "../utils/auth";
 
 const SingUp = () => {
   const navigate = useNavigate();
@@ -18,19 +19,26 @@ const SingUp = () => {
   const handleSignUp = async () => {
     setLoading(true);
     try {
-      await axios.post(`${BACKEND_URL}/signup`, {
+      const response = await axios.post(`${BACKEND_URL}/signup`, {
         name: nameRef.current?.value,
         username: usernameRef.current?.value,
         password: passwordRef.current?.value,
       });
-      showToast("Sign up successful!", "success");
-      setLoading(false);
 
-      // Handle success (e.g., redirect, show success message)
+      // If the backend returns a token after signup, log the user in
+      if (response.data.token) {
+        login(response.data.token);
+        showToast("Sign up successful! You are now logged in.", "success");
+        setLoading(false);
+        navigate("/dashboard");
+      } else {
+        showToast("Sign up successful! Please sign in.", "success");
+        setLoading(false);
+        navigate("/signin");
+      }
     } catch (error: string | any) {
       showToast(error.response.data.error, "error");
       setLoading(false);
-      // Handle error (e.g., show error message)
     }
   };
 

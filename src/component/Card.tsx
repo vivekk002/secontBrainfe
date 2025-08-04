@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShareIcon from "../icons/ShareIcon";
 import { TrashIcon } from "../icons/TrashIcon";
+import { shareContent, copyToClipboard, deleteContent } from "../utils/share";
+import { useToast } from "../hooks/useToast";
+import Toast from "./Toast";
 import "../index.css";
 
 import Twitter from "../embeds/Twitter";
@@ -29,9 +32,73 @@ interface CardProps {
     | "medium"
     | "pinterest"
     | "spotify";
+  _id?: string; // Add content ID for sharing
+  onDelete?: () => void; // Callback for when content is deleted
 }
 
-const Card = ({ title, link, contentType, createdAt }: CardProps) => {
+const Card = ({
+  title,
+  link,
+  contentType,
+  createdAt,
+  _id,
+  onDelete,
+}: CardProps) => {
+  const { toast, showToast, hideToast } = useToast();
+  const [isSharing, setIsSharing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleShare = async () => {
+    console.log("Share clicked for content:", { _id, title, link });
+    if (!_id) {
+      console.error("No content ID provided");
+      showToast("Cannot share: Missing content ID", "error");
+      return;
+    }
+
+    setIsSharing(true);
+    try {
+      const shareLink = await shareContent(_id, link);
+      if (shareLink) {
+        showToast("Content shared successfully!", "success");
+      } else {
+        showToast("Failed to share content", "error");
+      }
+    } catch (error) {
+      console.error("Share error:", error);
+      showToast("Failed to share content", "error");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    console.log("Delete clicked for content:", { _id, title });
+    if (!_id) {
+      console.error("No content ID provided");
+      showToast("Cannot delete: Missing content ID", "error");
+      return;
+    }
+
+    if (!window.confirm("Are you sure you want to delete this content?")) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await deleteContent(_id);
+      showToast("Content deleted successfully!", "success");
+      // Trigger refresh of content list
+      if (onDelete) {
+        onDelete();
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      showToast("Failed to delete content", "error");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   const renderContent = () => {
     switch (contentType) {
       case "youtube":
@@ -92,13 +159,21 @@ const Card = ({ title, link, contentType, createdAt }: CardProps) => {
         <header className=" p-6 items-center flex justify-between">
           <h3 className="text-xl font-bold stroke-2 text-gray-700">{title}</h3>
           <div className="flex gap-5">
-            <ShareIcon size="md" className="cursor-pointer" />
-            <TrashIcon size="md" className="cursor-pointer" />
+            <ShareIcon
+              size="md"
+              className={`cursor-pointer ${isSharing ? "opacity-50" : ""}`}
+              onClick={handleShare}
+            />
+            <TrashIcon
+              size="md"
+              className={`cursor-pointer ${isDeleting ? "opacity-50" : ""}`}
+              onClick={handleDelete}
+            />
           </div>
         </header>
 
-        <section className="">
-          <div>{renderContent()}</div>
+        <section className="flex-1 min-h-0">
+          <div className="h-full">{renderContent()}</div>
         </section>
       </div>
       <footer className=" ml-2">
@@ -119,6 +194,16 @@ const Card = ({ title, link, contentType, createdAt }: CardProps) => {
           </div>
         </div>
       </footer>
+
+      {/* Toast for sharing feedback */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+        position="top-right"
+        duration={3000}
+      />
     </div>
   );
 };

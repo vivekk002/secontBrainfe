@@ -10,8 +10,8 @@ const Medium = ({ url }: MediumProps) => {
 
   // Medium doesn't have direct embed, so we'll create a preview card
   return (
-    <div className="medium-embed">
-      <div className="bg-gray-50 border border-gray-200 p-4 rounded-3xl">
+    <div className="medium-embed h-full">
+      <div className="bg-gray-50 border border-gray-200 p-4 rounded-3xl h-full flex flex-col justify-center">
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-lg">M</span>
