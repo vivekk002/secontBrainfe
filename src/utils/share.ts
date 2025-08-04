@@ -30,8 +30,7 @@ export const unshareBrain = async (): Promise<void> => {
 
 // Share individual content
 export const shareContent = async (
-  contentId: string,
-  contentLink: string
+  contentId: string
 ): Promise<string | null> => {
   try {
     console.log("Sharing content with ID:", contentId);

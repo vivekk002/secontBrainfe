@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CrossIcon from "../icons/CrossIcon";
 import Button from "./Button";
 import { shareBrain, unshareBrain, copyToClipboard } from "../utils/share";

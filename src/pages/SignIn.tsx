@@ -28,6 +28,7 @@ const SingIn = () => {
       login(jwt);
 
       showToast("Sign In successful!", "success");
+      refreshAuth;
       setLoading(false);
 
       // Navigate to dashboard
