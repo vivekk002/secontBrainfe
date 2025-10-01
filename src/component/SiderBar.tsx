@@ -1,29 +1,69 @@
 import BrainiIcon from "../icons/BrainIcon";
-import DocumentIcon from "../icons/DocumentIcon";
-import HashIcon from "../icons/HashIcon";
-import LinkIcon from "../icons/LinkIcon";
+
+import Spotify from "../icons/Spotify";
+
+import Pinterest from "../icons/Pinterest";
+import Reddit from "../icons/Reddit";
 import TwitterIcon from "../icons/TwitterIcon";
 import YoutubeIcon from "../icons/YoutubeIcon";
 import SideBarItems from "./SideBarItems";
 import UserProfileDropdown from "./UserProfileDropdown";
 
-const Sidebar = () => {
+interface SidebarProps {
+  setFilter: (value: string) => void;
+}
+
+const Sidebar = ({ setFilter }: SidebarProps) => {
   return (
-    <div className="w-[22%] border-r border-gray-300 bg-white">
-      <div className="h-[85%]">
-        <div className="flex items-center p-6 gap-3 align-middle">
-          <BrainiIcon size="lg" />
-          <h3 className="font-bold text-center text-3xl ">Second Brain</h3>
+    <div className="w-16 md:w-[18%] md:border-r bg-gray-50 border-gray-300 md:bg-white overflow-hidden transition-all duration-300 ease-in-out">
+      <div className="h-[85%] flex flex-col">
+        <div className="flex items-center md:px-4 md:py-6 gap-3 align-middle md:justify-start justify-center">
+          <div className="flex-shrink-0 transition-all duration-200">
+            <BrainiIcon size="md" />
+          </div>
+          <h3 className="font-bold text-center text-2xl hidden md:block transition-opacity duration-300">
+            Second Brain
+          </h3>
         </div>
-        <div className="flex flex-col justify-between">
-          <SideBarItems icon={<YoutubeIcon size="lg" />} text={"Youtube"} />
-          <SideBarItems icon={<TwitterIcon size="md" />} text={"Tweets"} />
-          <SideBarItems icon={<DocumentIcon size="lg" />} text={"Documents"} />
-          <SideBarItems icon={<LinkIcon size="lg" />} text={"Links"} />
-          <SideBarItems icon={<HashIcon size="lg" />} text={"Hashtags"} />
+        <div className="hidden md:flex flex-col justify-between  items-start gap-1  ">
+          <SideBarItems
+            icon={<YoutubeIcon size="lg" />}
+            text={"Youtube"}
+            className="hover:bg-gray-100 ml-4 mr-4 w-60"
+            setFilter={setFilter}
+            value="youtube"
+          />
+          <SideBarItems
+            icon={<TwitterIcon size="lg" />}
+            text={"Tweets"}
+            className="hover:bg-gray-100 ml-4 mr-4 w-60"
+            setFilter={setFilter}
+            value="twitter"
+          />
+          <SideBarItems
+            icon={<Reddit size="lg" />}
+            text={"Reddit"}
+            className="hover:bg-gray-100 ml-4 mr-4 w-60"
+            setFilter={setFilter}
+            value="reddit"
+          />
+          <SideBarItems
+            icon={<Pinterest size="lg" />}
+            text={"Pinterest"}
+            className="hover:bg-gray-100 ml-4 mr-4 w-60"
+            setFilter={setFilter}
+            value="pinterest"
+          />
+          <SideBarItems
+            icon={<Spotify size="lg" />}
+            text={"Spotify"}
+            className="hover:bg-gray-100 ml-4 mr-4 w-60"
+            setFilter={setFilter}
+            value="spotify"
+          />
         </div>
       </div>
-      <div className="h-[15%] items-center p-5 bg-gray-50">
+      <div className="h-[15%] hidden md:flex items-center md:justify-start justify-center px-4 py-5 bg-gray-50">
         <UserProfileDropdown />
       </div>
     </div>

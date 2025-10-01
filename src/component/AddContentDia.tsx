@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CrossIcon from "../icons/CrossIcon";
 import Button from "./Button";
 import Dropdown from "./Dropdown";
@@ -7,12 +7,20 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import Toast from "../component/Toast";
 import { useToast } from "../hooks/useToast";
+import AddTagDropdown from "./AddTagDropdown";
+
+type Tag = {
+  _id: string;
+  name: string;
+  contentId: string[];
+};
 
 type PropsType = {
   // or your appropriate type
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  addContentOpen: boolean;
+  setAddContentOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onContentAdded?: () => void;
+  tags: Tag[];
 };
 
 interface OptionsType {
@@ -22,27 +30,40 @@ interface OptionsType {
 
 const dropdownOptions = [
   { label: "YouTube", value: "youtube" },
-  { label: "Threads", value: "threads" },
+  { label: "Twitter", value: "twitter" },
   { label: "Reddit", value: "reddit" },
-
   { label: "Pinterest", value: "pinterest" },
   { label: "Spotify", value: "spotify" },
 ];
 
-const AddContentDia = ({ open, setOpen, onContentAdded }: PropsType) => {
+const AddContentDia = ({
+  addContentOpen,
+  setAddContentOpen,
+  onContentAdded,
+  tags,
+}: PropsType) => {
   const [Loading, setLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const [optionType, setOptionType] = useState<OptionsType | null>(null);
+  const [selectedTags, setSelectedTags] = useState<
+    { value: string; label: string }[]
+  >([]);
   const titleref = useRef<HTMLInputElement>(null);
   const linkref = useRef<HTMLInputElement>(null);
   const handleSelect = (option: OptionsType) => {
     setOptionType(option);
   };
 
+  const handleTagSelect = (tags: { value: string; label: string }[]) => {
+    setSelectedTags(tags);
+  };
+
   const handleSubmit = async () => {
     const title = titleref.current?.value;
     const link = linkref.current?.value;
     const contentType = optionType?.value;
+    const tags = selectedTags.map((tag) => tag.value);
+    console.log("tags", tags);
 
     if (!title || !link || !contentType) {
       showToast("Please fill in all fields", "warning");
@@ -54,31 +75,52 @@ const AddContentDia = ({ open, setOpen, onContentAdded }: PropsType) => {
         title,
         link,
         contentType,
+        tags,
       });
       showToast("Content added successfully", "success");
-      setOpen(false);
+      setAddContentOpen(false);
       // Trigger content refresh
       if (onContentAdded) {
         onContentAdded();
+        window.location.reload();
       }
-    } catch (e) {
-      console.log("error", e);
+    } catch (error: any) {
+      console.log("error1", error);
+      showToast(error.response.data.details, "error");
       setLoading(false);
     }
   };
 
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setAddContentOpen(false);
+      }
+    };
+
+    if (selectedTags) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedTags]);
+
   return (
     <div>
-      {open && (
+      {addContentOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500/40  w-full h-full">
-          <div className="bg-white rounded-lg shadow-lg w-1/3 p-6 h-[90%] opacity-100 ">
+          <div className="bg-white rounded-lg shadow-lg w-full md:w-1/3 p-6 h-[90%] opacity-100 ">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold mb-4 h-[30%]">
                 Add New Content
               </h2>
               <CrossIcon
                 size="lg"
-                onClick={() => setOpen(false)}
+                onClick={() => setAddContentOpen(false)}
                 className="cursor-pointer"
               />
             </div>
@@ -95,7 +137,16 @@ const AddContentDia = ({ open, setOpen, onContentAdded }: PropsType) => {
                 ref={linkref}
                 required={true}
               />
-              <Dropdown options={dropdownOptions} onSelect={handleSelect} />
+              <Dropdown
+                options={dropdownOptions}
+                onSelect={handleSelect}
+                placeholder="Select content type"
+              />
+              <AddTagDropdown
+                onSelect={handleTagSelect}
+                placeholder="Select Tag"
+                tags={tags}
+              />
             </div>
             <div className="mt-4 justify-center p-4 h-[10%]">
               {Loading ? (

@@ -15,7 +15,7 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = ({
   options,
-  placeholder = "Select an content type",
+  placeholder,
   onSelect,
   className = "",
 }) => {

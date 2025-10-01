@@ -48,7 +48,7 @@ const SingUp = () => {
   return (
     <div className="flex h-screen w-full  items-center justify-center">
       <div
-        className="flex p-6 md:w-[40%] lg:w-[40%] justify-center h-[60%]  bg-gray-100 
+        className="flex p-6 md:w-[40%] justify-center md:h-[60%]  bg-gray-100 
       rounded-2xl border border-gray-300 shadow-xl stroke-2 "
       >
         <div className="flex flex-col gap-4 justify-center w-full ml-10 mr-10 p-4 text-gray-700">

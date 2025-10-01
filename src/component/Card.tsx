@@ -13,12 +13,19 @@ import Pinterest from "../embeds/Pinterest";
 import Spotify from "../embeds/Spotify";
 import Youtube from "../embeds/Youtube";
 
+type Tag = {
+  _id: string;
+  name: string;
+  contentId: string[];
+};
+
 interface CardProps {
   title: string;
   createdAt: string;
+  tags: Tag[];
   link: string;
   contentType: "youtube" | "twitter" | "reddit" | "pinterest" | "spotify";
-  _id?: string; // Add content ID for sharing
+  _id: string; // Add content ID for sharing
   onDelete?: () => void; // Callback for when content is deleted
 }
 
@@ -29,6 +36,7 @@ const Card = ({
   createdAt,
   _id,
   onDelete,
+  tags,
 }: CardProps) => {
   const { toast, showToast, hideToast } = useToast();
   const [isSharing, setIsSharing] = useState(false);
@@ -78,6 +86,7 @@ const Card = ({
       // Trigger refresh of content list
       if (onDelete) {
         onDelete();
+        window.location.reload();
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -127,9 +136,9 @@ const Card = ({
     }
   }, [link]);
   return (
-    <div className="rounded-lg border-0.75 h-[600px] w-[350px] border-gray-300 p-2 m-auto mt-1 shadow-lg bg-white flex flex-col justify-between">
+    <div className="rounded-lg border-0.75 h-auto border-gray-300 p-3 mt-1 shadow-lg bg-white flex flex-col justify-between w-full">
       <div>
-        <header className=" p-6 items-center flex justify-between">
+        <header className=" p-2 pl-6 items-center flex justify-between">
           <h3 className="text-xl font-bold stroke-2 text-gray-700">{title}</h3>
           <div className="flex gap-5">
             <ShareIcon
@@ -145,22 +154,20 @@ const Card = ({
           </div>
         </header>
 
-        <section className="flex-1 ">
-          <div className="h-[400px] ">{renderContent()}</div>
+        <section className="flex-1">
+          <div className="h-[60vh]">{renderContent()}</div>
         </section>
       </div>
       <footer className=" ml-2">
         <div className="p-2 justify-between items-center ">
           <div className="flex gap-2 mt-3">
-            <button className="bg-blue-100 text-blue-600 rounded-xl pl-2 pr-2 justify-between items-center p-0.5">
-              #tags
-            </button>
-            <button className="bg-blue-100 text-blue-600 rounded-xl pl-2 pr-2 justify-between items-center p-0.5">
-              #tags
-            </button>
-            <button className="bg-blue-100 text-blue-600 rounded-xl pl-2 pr-2 justify-between items-center p-0.5">
-              #tagsasfsdf
-            </button>
+            {tags.map((tag) => (
+              <div key={tag._id}>
+                <button className="bg-blue-100 text-blue-600 rounded-xl pl-2 pr-2 justify-between items-center p-0.5">
+                  #{tag.name}
+                </button>
+              </div>
+            ))}
           </div>
           <div className="mt-2 text-gray-500">
             Added on {new Date(createdAt).toLocaleDateString()}

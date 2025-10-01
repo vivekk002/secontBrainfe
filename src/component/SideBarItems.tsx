@@ -3,16 +3,24 @@ import type { ReactElement } from "react";
 interface SideBarItemsProps {
   icon: ReactElement;
   text: string;
+  value: string;
+  className: string;
+  setFilter: (value: string) => void;
 }
 
 const SideBarItems = (props: SideBarItemsProps) => {
+  const handleFilter = () => {
+    props.setFilter(props.value);
+  };
+
   return (
     <div
-      className="flex items-center gap-4 p-4 ml-4 mr-4 cursor-pointer  text-gray-700 text-xl
-    hover:bg-gray-100 rounded-lg transition-colors duration-150"
+      className={`flex items-center gap-4 p-3 mt-2  cursor-pointer  text-gray-700 text-xl
+     rounded-lg transition-colors duration-150 ${props.className} `}
+      onClick={handleFilter}
     >
-      {props.icon}
-      {props.text}
+      <div>{props.icon}</div>
+      <div>{props.text}</div>
     </div>
   );
 };

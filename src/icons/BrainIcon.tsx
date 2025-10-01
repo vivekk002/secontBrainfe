@@ -5,8 +5,8 @@ interface iconProps {
 }
 
 const sizeClasses = {
-  sm: "size-2",
-  md: "size-4",
+  sm: "size-10",
+  md: "size-15",
   lg: "size-20",
 };
 

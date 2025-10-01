@@ -1,5 +1,3 @@
-import type { ReactElement } from "react";
-
 interface ButtonProps {
   label?: string;
   onClick?: () => void;
@@ -7,7 +5,7 @@ interface ButtonProps {
   variant: "primary" | "secondary";
   size: "sm" | "md" | "lg";
   startIcon?: ReactElement;
-  endIcon?: ReactElement;
+
   className?: string;
 }
 
@@ -17,8 +15,8 @@ interface variantProps {
 }
 
 const variantClasses: variantProps = {
-  primary: "bg-blue-600 text-white",
-  secondary: "bg-blue-100 text-blue-300",
+  primary: "bg-blue-600 text-white hover:bg-blue-700",
+  secondary: "bg-blue-100 text-blue-300 hover:bg-blue-200 ",
 };
 
 const sizeClasses = {
@@ -27,7 +25,8 @@ const sizeClasses = {
   lg: "px-6 py-3 text-lg",
 };
 
-const defaultStyle = "flex items-center rounded-lg";
+const defaultStyle =
+  "flex items-center justify-center rounded-lg transition-all duration-300 ease-in-out";
 
 const Button = (props: ButtonProps) => {
   return (
@@ -35,17 +34,19 @@ const Button = (props: ButtonProps) => {
       <button
         onClick={props.onClick}
         disabled={props.disabled}
-        className={`${variantClasses[props.variant]} ${
-          sizeClasses[props.size]
-        } ${defaultStyle} ${
-          props.disabled ? "opacity-50 cursor-not-allowed" : ""
-        } ${props.className || ""}`}
+        className={`
+          ${variantClasses[props.variant]} 
+          ${sizeClasses[props.size]}
+          ${defaultStyle} 
+          ${props.disabled ? "opacity-50 cursor-not-allowed" : ""} 
+          ${props.className || ""}
+          
+        `}
       >
         {props.startIcon && (
-          <span className="flex items-center mr-2">{props.startIcon}</span>
+          <span className={`flex items-center `}>{props.startIcon}</span>
         )}
-        {props.label}
-        {props.endIcon && <div className="">{props.endIcon}</div>}
+        <span className="whitespace-nowrap">{props.label}</span>
       </button>
     </div>
   );
