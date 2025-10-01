@@ -8,7 +8,7 @@ import PlusIcon from "../icons/PlusIcon";
 import Card from "../component/Card";
 import Loader from "../component/Loader";
 import { BACKEND_URL } from "../config";
-import axios, { all } from "axios";
+import axios from "axios";
 import HamburgerMenu from "../component/HamburgerMenu";
 
 type Tag = {

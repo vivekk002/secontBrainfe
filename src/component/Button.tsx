@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 interface ButtonProps {
   label?: string;
   onClick?: () => void;

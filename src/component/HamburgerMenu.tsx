@@ -10,11 +10,6 @@ import Spotify from "../icons/Spotify";
 import PlusIcon from "../icons/PlusIcon";
 import UserProfileDropdown from "./UserProfileDropdown";
 
-type Tag = {
-  _id: string;
-  name: string;
-  contentId: string[];
-};
 
 interface HamburgerMenuProps {
   setShareModalOpen: (open: boolean) => void;
