@@ -8,7 +8,6 @@ import "../index.css";
 
 import Twitter from "../embeds/Twitter";
 import Reddit from "../embeds/Reddit";
-
 import Pinterest from "../embeds/Pinterest";
 import Spotify from "../embeds/Spotify";
 import Youtube from "../embeds/Youtube";
@@ -25,8 +24,9 @@ interface CardProps {
   tags: Tag[];
   link: string;
   contentType: "youtube" | "twitter" | "reddit" | "pinterest" | "spotify";
-  _id: string; // Add content ID for sharing
-  onDelete?: () => void; // Callback for when content is deleted
+  _id: string;
+  onDelete?: () => void;
+  isSharedView?: boolean; // 🆕 Indicates if this is a shared public view
 }
 
 const Card = ({
@@ -37,11 +37,13 @@ const Card = ({
   _id,
   onDelete,
   tags,
+  isSharedView = false,
 }: CardProps) => {
   const { toast, showToast, hideToast } = useToast();
   const [isSharing, setIsSharing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // 🔧 FIXED: Share individual content with frontend URL
   const handleShare = async () => {
     console.log("Share clicked for content:", { _id, title, link });
     if (!_id) {
@@ -52,10 +54,18 @@ const Card = ({
 
     setIsSharing(true);
     try {
+      // 🆕 Get the share link from backend
       const shareLink = await shareContent(_id);
+
       if (shareLink) {
-        copyToClipboard(shareLink);
-        showToast("Content shared successfully!", "success");
+        // 🔧 FIXED: Convert backend URL to frontend URL
+        const frontendShareLink = shareLink.replace(
+          /http:\/\/localhost:3000\/api\/v1\/content\/share\//,
+          `${window.location.origin}/content/`
+        );
+
+        copyToClipboard(frontendShareLink);
+        showToast("Link copied to clipboard!", "success");
       } else {
         showToast("Failed to share content", "error");
       }
@@ -67,6 +77,7 @@ const Card = ({
     }
   };
 
+  // 🔧 Delete content
   const handleDelete = async () => {
     console.log("Delete clicked for content:", { _id, title });
     if (!_id) {
@@ -83,10 +94,10 @@ const Card = ({
     try {
       await deleteContent(_id);
       showToast("Content deleted successfully!", "success");
+
       // Trigger refresh of content list
       if (onDelete) {
         onDelete();
-        window.location.reload();
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -95,20 +106,17 @@ const Card = ({
       setIsDeleting(false);
     }
   };
+
   const renderContent = () => {
     switch (contentType) {
       case "youtube":
         return <Youtube url={link} />;
-
       case "reddit":
         return <Reddit url={link} />;
-
       case "pinterest":
         return <Pinterest url={link} />;
-
       case "spotify":
         return <Spotify url={link} />;
-
       case "twitter":
         return <Twitter url={link} />;
       default:
@@ -135,22 +143,28 @@ const Card = ({
       (window as any).twttr.widgets.load();
     }
   }, [link]);
+
   return (
     <div className="rounded-lg border-0.75 h-auto border-gray-300 p-3 mt-1 shadow-lg bg-white flex flex-col justify-between w-full">
       <div>
-        <header className=" p-2 pl-6 items-center flex justify-between">
+        <header className="p-2 pl-6 items-center flex justify-between">
           <h3 className="text-xl font-bold stroke-2 text-gray-700">{title}</h3>
           <div className="flex gap-5">
+            {/* 🔧 Share icon - always visible */}
             <ShareIcon
               size="md"
               className={`cursor-pointer ${isSharing ? "opacity-50" : ""}`}
               onClick={handleShare}
             />
-            <TrashIcon
-              size="md"
-              className={`cursor-pointer ${isDeleting ? "opacity-50" : ""}`}
-              onClick={handleDelete}
-            />
+
+            {/* 🔧 FIXED: Delete icon - only visible when NOT in shared view */}
+            {!isSharedView && (
+              <TrashIcon
+                size="md"
+                className={`cursor-pointer ${isDeleting ? "opacity-50" : ""}`}
+                onClick={handleDelete}
+              />
+            )}
           </div>
         </header>
 
@@ -158,8 +172,9 @@ const Card = ({
           <div className="h-[60vh]">{renderContent()}</div>
         </section>
       </div>
-      <footer className=" ml-2">
-        <div className="p-2 justify-between items-center ">
+
+      <footer className="ml-2">
+        <div className="p-2 justify-between items-center">
           <div className="flex gap-2 mt-3">
             {tags.map((tag) => (
               <div key={tag._id}>

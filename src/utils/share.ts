@@ -1,15 +1,25 @@
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
-// Share the entire brain (all content)
+// Get the frontend URL base for correct sharing
+const getFrontendOrigin = () =>
+  typeof window !== "undefined" && window.location.origin
+    ? window.location.origin
+    : "http://localhost:3000";
+
+// Share the entire brain (all content) - returns public view URL
 export const shareBrain = async (): Promise<string | null> => {
   try {
     const response = await axios.post(`${BACKEND_URL}/brain/share`, {
       share: true,
     });
-
-    // Based on the backend code, the response includes shareLink
-    return response.data.shareLink || null;
+    // The backend returns something like http://localhost:3000/api/v1/brain/<hash>
+    if (response.data.shareLink) {
+      // Convert API URL to frontend public URL
+      const hash = response.data.shareLink.split("/").pop();
+      return `${getFrontendOrigin()}/brain/${hash}`;
+    }
+    return null;
   } catch (error) {
     console.error("Error sharing brain:", error);
     throw error;
@@ -19,46 +29,41 @@ export const shareBrain = async (): Promise<string | null> => {
 // Unshare the brain
 export const unshareBrain = async (): Promise<void> => {
   try {
-    await axios.post(`${BACKEND_URL}/brain/share`, {
-      share: false,
-    });
+    await axios.post(`${BACKEND_URL}/brain/share`, { share: false });
   } catch (error) {
     console.error("Error unsharing brain:", error);
     throw error;
   }
 };
 
-// Share individual content
+// Share individual content - returns frontend public view URL
 export const shareContent = async (
   contentId: string
 ): Promise<string | null> => {
   try {
-    console.log("Sharing content with ID:", contentId);
-    // First, create a shareable link on the backend
     const response = await axios.post(
       `${BACKEND_URL}/content/${contentId}/share`
     );
-
-    console.log("Share response:", response.data);
-
     if (response.data.shareLink) {
-      const shareLink = response.data.shareLink;
+      // The backend returns http://localhost:3000/api/v1/content/share/<hash>
+      const hash = response.data.shareLink.split("/").pop();
+      // Build frontend public URL
+      const publicUrl = `${getFrontendOrigin()}/content/${hash}`;
 
       // Try to use native share API first
       if (navigator.share) {
         await navigator.share({
           title: "Shared from Second Brain",
           text: "Check out this content I found interesting!",
-          url: shareLink,
+          url: publicUrl,
         });
       } else {
         // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(shareLink);
+        await navigator.clipboard.writeText(publicUrl);
       }
 
-      return shareLink;
+      return publicUrl;
     }
-
     return null;
   } catch (error) {
     console.error("Error sharing content:", error);
@@ -83,9 +88,15 @@ export const getShareStatus = async (): Promise<{
 }> => {
   try {
     const response = await axios.get(`${BACKEND_URL}/brain/share`);
+    let shareLink;
+    if (response.data.shareLink) {
+      // Convert API link to public frontend link
+      const hash = response.data.shareLink.split("/").pop();
+      shareLink = `${getFrontendOrigin()}/brain/${hash}`;
+    }
     return {
       isShared: response.data.isShared,
-      shareLink: response.data.shareLink,
+      shareLink,
     };
   } catch (error) {
     console.error("Error getting share status:", error);
@@ -96,9 +107,7 @@ export const getShareStatus = async (): Promise<{
 // Delete content
 export const deleteContent = async (contentId: string): Promise<void> => {
   try {
-    console.log("Deleting content with ID:", contentId);
-    const response = await axios.delete(`${BACKEND_URL}/content/${contentId}`);
-    console.log("Delete response:", response.data);
+    await axios.delete(`${BACKEND_URL}/content/${contentId}`);
   } catch (error) {
     console.error("Error deleting content:", error);
     throw error;
