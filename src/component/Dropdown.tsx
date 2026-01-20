@@ -21,7 +21,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(
-    null
+    null,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +80,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <button
               key={index}
               onClick={() => handleOptionClick(option)}
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 focus:outline-none focus:bg-gray-100 first:rounded-t-md last:rounded-b-md"
+              className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 first:rounded-t-md last:rounded-b-md"
             >
               {option.label}
             </button>

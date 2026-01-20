@@ -33,7 +33,7 @@ const AddTagDropdown = ({
   const filteredOptions = options.filter(
     (option) =>
       option.label.toLowerCase().includes(inputValue.toLowerCase()) &&
-      !selectedTags.some((selected) => selected.value === option.value)
+      !selectedTags.some((selected) => selected.value === option.value),
   );
 
   // Handler when user selects an existing option
@@ -53,10 +53,10 @@ const AddTagDropdown = ({
     // Check if tag already exists (case-insensitive)
     if (
       selectedTags.some(
-        (tag) => tag.label.toLowerCase() === newTag.toLowerCase()
+        (tag) => tag.label.toLowerCase() === newTag.toLowerCase(),
       ) ||
       options.some(
-        (option) => option.label.toLowerCase() === newTag.toLowerCase()
+        (option) => option.label.toLowerCase() === newTag.toLowerCase(),
       )
     ) {
       setInputValue("");
@@ -79,7 +79,7 @@ const AddTagDropdown = ({
   // Remove a selected tag
   const handleRemoveTag = (tagToRemove: { value: string; label: string }) => {
     const newSelectedTags = selectedTags.filter(
-      (tag) => tag.value !== tagToRemove.value
+      (tag) => tag.value !== tagToRemove.value,
     );
     setSelectedTags(newSelectedTags);
     onSelect(newSelectedTags);
@@ -165,7 +165,7 @@ const AddTagDropdown = ({
               <button
                 key={index}
                 onClick={() => handleOptionClick(option)}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 focus:outline-none focus:bg-gray-100 first:rounded-t-md last:rounded-b-md"
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 first:rounded-t-md last:rounded-b-md"
               >
                 {option.label}
               </button>
@@ -182,11 +182,11 @@ const AddTagDropdown = ({
           {inputValue.trim() !== "" &&
             !options.some(
               (option) =>
-                option.label.toLowerCase() === inputValue.trim().toLowerCase()
+                option.label.toLowerCase() === inputValue.trim().toLowerCase(),
             ) &&
             !selectedTags.some(
               (tag) =>
-                tag.label.toLowerCase() === inputValue.trim().toLowerCase()
+                tag.label.toLowerCase() === inputValue.trim().toLowerCase(),
             ) && (
               <button
                 onClick={handleAddNewTag}

@@ -62,8 +62,8 @@ const ShareModal = ({ open, setOpen }: ShareModalProps) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-500/40 w-full h-full z-50">
-      <div className="bg-white rounded-lg shadow-lg w-full md:w-1/3 p-6 max-h-[80%] overflow-y-auto">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-500/40 dark:bg-black/60 w-full h-full z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full md:w-1/3 p-6 max-h-[80%] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Share Your Brain</h2>
           <CrossIcon

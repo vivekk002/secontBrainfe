@@ -1,28 +1,25 @@
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
-// Check if token is expired
 export const isTokenExpired = (token: string): boolean => {
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
     const currentTime = Date.now() / 1000;
     return payload.exp < currentTime;
   } catch (error) {
-    return true; // If we can't parse the token, consider it expired
+    return true;
   }
 };
 
-// Logout function
 export const logout = async () => {
   try {
-    // Call backend to invalidate token
     await axios.post(`${BACKEND_URL}/logout`);
   } catch (error) {
     console.error("Error during logout:", error);
   } finally {
-    // Clear local storage and redirect regardless of backend response
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("profilePicture");
     window.location.href = "/signin";
   }
 };
@@ -30,19 +27,20 @@ export const logout = async () => {
 interface propTypes {
   name: string;
   jwt: string;
+  profilePicture?: string;
 }
 
-// Login function
-export const login = ({ jwt, name }: propTypes) => {
+export const login = ({ jwt, name, profilePicture }: propTypes) => {
   localStorage.setItem("token", jwt);
   localStorage.setItem("user", name);
-  // Dispatch a custom event to notify components about the login
+  if (profilePicture) {
+    localStorage.setItem("profilePicture", profilePicture);
+  }
   window.dispatchEvent(
-    new CustomEvent("authStateChanged", { detail: { isAuthenticated: true } })
+    new CustomEvent("authStateChanged", { detail: { isAuthenticated: true } }),
   );
 };
 
-// Validate token and redirect if expired
 export const validateToken = (): boolean => {
   const token = localStorage.getItem("token");
 
@@ -59,9 +57,7 @@ export const validateToken = (): boolean => {
   return true;
 };
 
-// Setup axios interceptors for automatic token validation
 export const setupAxiosInterceptors = () => {
-  // Request interceptor to add token to headers
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token");
@@ -72,25 +68,22 @@ export const setupAxiosInterceptors = () => {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
-  // Response interceptor to handle token expiration
   axios.interceptors.response.use(
     (response) => {
       return response;
     },
     (error) => {
       if (error.response?.status === 401) {
-        // Token is invalid or expired
         logout();
       }
       return Promise.reject(error);
-    }
+    },
   );
 };
 
-// Initialize auth setup
 export const initializeAuth = () => {
   setupAxiosInterceptors();
 };

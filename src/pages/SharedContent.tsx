@@ -6,7 +6,6 @@ import Loader from "../component/Loader";
 import BrainiIcon from "../icons/BrainIcon";
 import { BACKEND_URL } from "../config";
 
-// 🆕 SharedContent Page - Public view of individual shared content
 const SharedContent = () => {
   const { hash } = useParams<{ hash: string }>();
   const [content, setContent] = useState<any>(null);
@@ -18,7 +17,7 @@ const SharedContent = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${BACKEND_URL}/content/share/${hash}`
+          `${BACKEND_URL}/content/share/${hash}`,
         );
 
         setContent(response.data.content);
@@ -27,7 +26,7 @@ const SharedContent = () => {
         console.error("Error fetching shared content:", err);
         setError(
           err.response?.data?.error ||
-            "Failed to load content. The link may be invalid or expired."
+            "Failed to load content. The link may be invalid or expired.",
         );
       } finally {
         setLoading(false);
@@ -72,7 +71,7 @@ const SharedContent = () => {
           <h1 className="text-3xl font-bold text-gray-800 mb-4 mt-4">
             Content Not Found
           </h1>
-          <p className="text-lg text-gray-600 mb-6">{error}</p>
+          <p className="text-lg text-slate-600 mb-6">{error}</p>
           <a
             href="/"
             className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors duration-200"
@@ -88,10 +87,10 @@ const SharedContent = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 p-6">
       <div className="max-w-4xl mx-auto">
         <header className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
             Shared Content
           </h1>
-          <p className="text-gray-600">View this shared item</p>
+          <p className="text-slate-600">View this shared item</p>
         </header>
 
         <Card

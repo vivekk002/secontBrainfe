@@ -6,7 +6,6 @@ import Loader from "../component/Loader";
 import BrainiIcon from "../icons/BrainIcon";
 import { BACKEND_URL } from "../config";
 
-// 🆕 SharedBrain Page - Public view of shared content
 const SharedBrain = () => {
   const { sharelink } = useParams<{ sharelink: string }>();
   const [contents, setContents] = useState([]);
@@ -14,7 +13,6 @@ const SharedBrain = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔧 Fetch shared brain content
   useEffect(() => {
     const fetchSharedBrain = async () => {
       try {
@@ -28,7 +26,7 @@ const SharedBrain = () => {
         console.error("Error fetching shared brain:", err);
         setError(
           err.response?.data?.error ||
-            "Failed to load shared brain. The link may be invalid or expired."
+            "Failed to load shared brain. The link may be invalid or expired.",
         );
       } finally {
         setLoading(false);
@@ -40,7 +38,6 @@ const SharedBrain = () => {
     }
   }, [sharelink]);
 
-  // 🎨 Loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
@@ -71,7 +68,6 @@ const SharedBrain = () => {
     );
   }
 
-  // 🚨 Error state
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50">
@@ -94,27 +90,23 @@ const SharedBrain = () => {
     );
   }
 
-  // 🎨 Main shared brain view
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
-      {/* 🆕 Header Section */}
-      <header className="bg-white border-b-2 border-gray-200 shadow-sm sticky top-0 z-50">
+      <header className="bg-white border-b-2 border-slate-200 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6">
           <div className="flex items-center justify-between">
-            {/* Left: Branding */}
             <div className="flex items-center gap-3">
               <BrainiIcon size="md" />
               <div>
                 <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Second Brain
                 </h1>
-                <p className="text-sm text-gray-600 hidden md:block">
+                <p className="text-sm text-slate-600 hidden md:block">
                   Shared by {ownerName}
                 </p>
               </div>
             </div>
 
-            {/* Right: Info badge */}
             <div className="flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full">
               <svg
                 className="w-5 h-5 text-purple-600"
@@ -135,26 +127,22 @@ const SharedBrain = () => {
             </div>
           </div>
 
-          {/* Mobile: Owner name */}
           <p className="text-sm text-gray-600 mt-2 md:hidden">
             Shared by <span className="font-semibold">{ownerName}</span>
           </p>
         </div>
       </header>
 
-      {/* 🆕 Content Section */}
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-        {/* Title and count */}
         <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
             {ownerName}'s Brain Collection
           </h2>
-          <p className="text-gray-600">
+          <p className="text-slate-600">
             {contents.length} {contents.length === 1 ? "item" : "items"} shared
           </p>
         </div>
 
-        {/* 🎨 Content Grid or Empty State */}
         {contents.length > 0 ? (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {contents.map((item: any) => (
@@ -165,16 +153,13 @@ const SharedBrain = () => {
                 link={item.link}
                 _id={item._id}
                 createdAt={item.createdAt}
-                // 🔧 Disable delete for shared view
                 onDelete={() => {}}
                 tags={[]}
-                // 🆕 Add a prop to indicate this is a shared view (optional - modify Card component)
                 isSharedView={true}
               />
             ))}
           </div>
         ) : (
-          // Empty state
           <div className="text-center py-16">
             <div className="mb-6 opacity-50">
               <BrainiIcon size="lg" />
@@ -189,16 +174,15 @@ const SharedBrain = () => {
         )}
       </main>
 
-      {/* 🆕 Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      <footer className="bg-white border-t border-slate-200 mt-16">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 text-center">
-          <p className="text-gray-600 text-sm">
+          <p className="text-slate-600 text-sm">
             Powered by{" "}
             <span className="font-semibold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Second Brain
             </span>
           </p>
-          <p className="text-gray-500 text-xs mt-2">
+          <p className="text-slate-500 text-xs mt-2">
             Want your own Second Brain?{" "}
             <a
               href="/signup"

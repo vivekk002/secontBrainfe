@@ -1,7 +1,18 @@
 @import "tailwindcss";
 
-@theme {
-  --color-blue-100: #e0e7ff;
-  --color-blue-300: #6c68c4;
-  --color-blue-600: #5145e4;
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc; /* Slate-50 - subtle contrast */
+    --text-primary: #0f172a; /* Slate-900 - softer than pure black */
+    --text-secondary: #475569; /* Slate-600 */
+    --border-color: #e2e8f0; /* Slate-200 */
+    --accent: #7c3aed; /* Purple-600 */
+    --accent-light: #f5f3ff; /* Purple-50 */
+    --accent-hover: #6d28d9; /* Purple-700 */
+  }
+
+  body {
+    @apply bg-[var(--bg-secondary)] text-[var(--text-primary)] antialiased;
+  }
 }

@@ -25,9 +25,12 @@ const SingUp = () => {
         password: passwordRef.current?.value,
       });
 
-      // If the backend returns a token after signup, log the user in
       if (response.data.token) {
-        login(response.data.token);
+        login({
+          jwt: response.data.token,
+          name: response.data.name,
+          profilePicture: response.data.profilePicture,
+        });
         showToast("Sign up successful! You are now logged in.", "success");
         setLoading(false);
         navigate("/dashboard");
@@ -46,12 +49,12 @@ const SingUp = () => {
     navigate("/signin");
   };
   return (
-    <div className="flex h-screen w-full  items-center justify-center">
+    <div className="flex h-screen w-full items-center justify-center bg-slate-50">
       <div
-        className="flex p-6 md:w-[40%] justify-center md:h-[60%]  bg-gray-100 
-      rounded-2xl border border-gray-300 shadow-xl stroke-2 "
+        className="flex p-6 md:w-[40%] justify-center md:h-[60%] bg-white
+      rounded-2xl border border-slate-200 shadow-xl stroke-2 "
       >
-        <div className="flex flex-col gap-4 justify-center w-full ml-10 mr-10 p-4 text-gray-700">
+        <div className="flex flex-col gap-4 justify-center w-full ml-10 mr-10 p-4 text-slate-700">
           <h2 className="flex text-3xl justify-center text-blue-600 font-bold p-4">
             Create new account
           </h2>
@@ -90,7 +93,7 @@ const SingUp = () => {
             />
           )}
 
-          <p className="text-center text-gray-500">
+          <p className="text-center text-slate-500">
             Already have an account?{" "}
             <span className="text-blue-600 cursor-pointer" onClick={goSignin}>
               Sign In

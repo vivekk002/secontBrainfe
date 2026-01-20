@@ -20,7 +20,6 @@ export const useAuth = () => {
     checkAuth();
   }, []);
 
-  // Listen for storage changes (when token is added/removed)
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "token") {

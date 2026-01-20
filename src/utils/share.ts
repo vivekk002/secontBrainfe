@@ -38,11 +38,11 @@ export const unshareBrain = async (): Promise<void> => {
 
 // Share individual content - returns frontend public view URL
 export const shareContent = async (
-  contentId: string
+  contentId: string,
 ): Promise<string | null> => {
   try {
     const response = await axios.post(
-      `${BACKEND_URL}/content/${contentId}/share`
+      `${BACKEND_URL}/content/${contentId}/share`,
     );
     if (response.data.shareLink) {
       // The backend returns http://localhost:3000/api/v1/content/share/<hash>

@@ -1,16 +1,7 @@
-interface iconProps {
-  size: "sm" | "md" | "lg";
-  className?: string;
-  onClick?: () => void;
-}
+import { iconSizeVariants } from ".";
+import type { IconProps } from ".";
 
-const sizeClasses = {
-  sm: "size-2",
-  md: "size-4",
-  lg: "size-6",
-};
-
-export const TrashIcon = (props: iconProps) => {
+export const TrashIcon = ({ size, className, onClick }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +9,8 @@ export const TrashIcon = (props: iconProps) => {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className={`${sizeClasses[props.size]} ${props.className}`}
-      onClick={props.onClick}
+      className={`${iconSizeVariants[size]} ${className}`}
+      onClick={onClick}
     >
       <path
         strokeLinecap="round"

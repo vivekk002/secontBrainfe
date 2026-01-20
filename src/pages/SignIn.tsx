@@ -6,18 +6,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "../component/Toast";
 import { useToast } from "../hooks/useToast";
-
 import { login } from "../utils/auth";
 import PasswordResetDia from "../component/PasswordResetDia";
 
-const SingIn = () => {
+const SignIn = () => {
   const navigate = useNavigate();
   const [Loading, setLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const [forgotPassword, setForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
   const handleSignin = async () => {
     setLoading(true);
     try {
@@ -27,35 +28,36 @@ const SingIn = () => {
       });
       const jwt = response.data.token;
       const name = response.data.name;
-      login({ jwt, name });
+      const profilePicture = response.data.profilePicture;
+      login({ jwt, name, profilePicture });
 
       showToast("Sign In successful!", "success");
 
       setLoading(false);
 
-      // Navigate to dashboard
       navigate("/dashboard");
-
-      // Handle success (e.g., redirect, show success message)
-    } catch (error: string | any) {
+    } catch (error: any) {
       console.log("error", error);
-      showToast(error.response.data.error, "error");
+      showToast(
+        error.response?.data?.error || "Sign in failed. Please try again.",
+        "error",
+      );
       setLoading(false);
-      // Handle error (e.g., show error message)
     }
   };
 
   const goSignUp = () => {
     navigate("/signup");
   };
+
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      <div className="flex h-screen w-full  items-center justify-center overflow-auto">
+    <div className="flex flex-col h-screen bg-slate-50">
+      <div className="flex h-screen w-full items-center justify-center overflow-auto">
         <div
-          className="flex p-6 w-full md:w-[40%] justify-center md:h-[60%]  bg-gray-100 
-      rounded-2xl border border-gray-300 shadow-xl stroke-2 "
+          className="flex p-6 w-full md:w-[40%] justify-center md:h-[60%] bg-white
+          rounded-2xl border border-slate-200 shadow-xl stroke-2"
         >
-          <div className="flex flex-col gap-6 justify-center w-full ml-10 mr-10 p-4 text-gray-700">
+          <div className="flex flex-col gap-6 justify-center w-full ml-10 mr-10 p-4 text-slate-700">
             <h2 className="flex text-3xl justify-center text-blue-600 font-bold p-4">
               Welcome Back!
             </h2>
@@ -66,26 +68,41 @@ const SingIn = () => {
               ref={usernameRef}
               required={true}
             />
-            <InputBox
-              type="password"
-              placeholder="Enter password"
-              ref={passwordRef}
-              required={true}
-            />
+
+            {/* Password input with toggle button */}
+            <div className="relative">
+              <InputBox
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                ref={passwordRef}
+                required={true}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-2xl hover:opacity-70 transition-opacity"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+
             <a
               onClick={() => {
                 setForgotPassword(true);
               }}
-              className="text-blue-600 text-right"
+              className="text-blue-600 text-right cursor-pointer hover:underline"
             >
-              forgot password
+              Forgot password?
             </a>
+
             {Loading ? (
               <Button
                 size="lg"
                 variant="primary"
-                label="Sign In"
-                className="w-full justify-center cursor-not-allowed"
+                label="Signing In..."
+                className="w-full justify-center cursor-not-allowed opacity-70"
+                disabled={true}
               />
             ) : (
               <Button
@@ -97,9 +114,12 @@ const SingIn = () => {
               />
             )}
 
-            <p className="text-center text-gray-500">
+            <p className="text-center text-slate-500">
               Create new account?{" "}
-              <span className="text-blue-600 cursor-pointer" onClick={goSignUp}>
+              <span
+                className="text-blue-600 cursor-pointer hover:underline"
+                onClick={goSignUp}
+              >
                 Sign Up
               </span>
             </p>
@@ -123,4 +143,4 @@ const SingIn = () => {
   );
 };
 
-export default SingIn;
+export default SignIn;

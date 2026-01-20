@@ -1,4 +1,3 @@
-// hooks/useToast.ts
 import { useState, useCallback } from "react";
 import type { ToastType } from "../component/Toast";
 

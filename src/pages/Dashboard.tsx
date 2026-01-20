@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../component/SiderBar";
+import Sidebar from "../component/SideBar";
 import AddContentDia from "../component/AddContentDia";
 import ShareModal from "../component/ShareModal";
 import Button from "../component/Button";
@@ -18,19 +18,51 @@ type Tag = {
   contentId: string[];
 };
 
+type Content = {
+  _id: string;
+  title: string;
+  link: string;
+  contentType: "youtube" | "pdf" | "doc" | "image" | "spreadsheets" | "article";
+  createdAt: string;
+};
+
 const Dashboard = () => {
   const [addContentOpen, setAddContentOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [content, setContent] = useState([]);
+  const [content, setContent] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
 
   const fetchContent = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/content`);
-      setContent(response.data.contents);
+      const contents = response.data.contents;
+
+      // Preload images to avoid blank spaces
+      const imagesToLoad = contents
+        .filter((c: any) => c.contentType === "image" && c.link)
+        .map((c: any) => c.link);
+
+      const preloadImage = (src: string) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          // Resolve on both load and error to prevent getting stuck
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      };
+
+      if (imagesToLoad.length > 0) {
+        // Wait for all images to load or fail
+        await Promise.all(
+          imagesToLoad.map((link: string) => preloadImage(link)),
+        );
+      }
+
+      setContent(contents);
       setTags(response.data.tags);
       setFilter("all");
       setLoading(false);
@@ -75,26 +107,22 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* 🎨 MODERN CLEAN HEADER - Option 1 */}
+    <div className="flex flex-col h-screen bg-slate-50">
       <header
         className="
         w-full flex items-center justify-between
         px-4 md:px-8 py-4 md:py-5
-        bg-gradient-to-r from-white via-gray-50 to-white
-        border-b-2 border-gray-200
+        bg-white
+        border-b-2 border-slate-200
         shadow-sm
         transition-all duration-200
       "
       >
-        {/* 🎨 LEFT: Brand Section with better spacing */}
         <div className="flex items-center gap-3 md:gap-4 min-w-[200px] md:min-w-[250px]">
-          {/* Brain Icon with subtle hover effect */}
           <div className="flex-shrink-0 transition-transform duration-200 hover:scale-110">
             <BrainiIcon size="md" />
           </div>
 
-          {/* Desktop: Second Brain title with gradient */}
           <h1
             className="
             hidden md:block 
@@ -107,7 +135,6 @@ const Dashboard = () => {
             Second Brain
           </h1>
 
-          {/* Mobile: All Notes title */}
           <h2
             className="
               block md:hidden 
@@ -123,7 +150,6 @@ const Dashboard = () => {
           </h2>
         </div>
 
-        {/* 🎨 CENTER: All Notes title (Desktop only) - Truly centered */}
         <div className="hidden md:flex flex-1 justify-center items-center">
           <h2
             className="
@@ -142,11 +168,9 @@ const Dashboard = () => {
           </h2>
         </div>
 
-        {/* 🎨 RIGHT: Action buttons with better spacing */}
         <div className="flex items-center gap-2 md:gap-3 min-w-[50px] md:min-w-[250px] justify-end">
-          {/* Mobile: Hamburger menu with hover effect */}
           <div className="block md:hidden">
-            <div className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <div className="p-2 rounded-lg hover:bg-slate-100 transition-colors duration-200">
               <HamburgerMenu
                 setAddContentOpen={setAddContentOpen}
                 setShareModalOpen={setShareModalOpen}
@@ -155,16 +179,16 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Desktop: Action buttons with enhanced styling */}
-          <div className="hidden md:flex gap-3">
+          <div className="hidden md:flex gap-3 items-center">
             <Button
               className="
                 cursor-pointer 
                 shadow-sm 
                 hover:shadow-md 
                 transition-all duration-200
+                hover:scale-105
               "
-              size="lg"
+              size="md"
               variant="secondary"
               label="Share Brain"
               startIcon={<ShareIcon size="lg" />}
@@ -188,18 +212,14 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Sidebar + Content section */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
         <Sidebar setFilter={setFilter} />
 
-        {/* Main Content Area */}
-        <div className="flex-1 bg-gray-50 flex flex-col overflow-hidden">
-          {/* Content Grid */}
+        <div className="flex-1 bg-slate-50 flex flex-col overflow-hidden">
           <section className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-3 md:p-4 overflow-auto">
             {content
               .filter(
-                (item: any) => filter === "all" || item.contentType === filter
+                (item: any) => filter === "all" || item.contentType === filter,
               )
               .map((item: any) => (
                 <Card
@@ -213,7 +233,7 @@ const Dashboard = () => {
                   tags={tags.filter(
                     (tag) =>
                       Array.isArray(tag.contentId) &&
-                      tag.contentId.includes(item._id)
+                      tag.contentId.includes(item._id),
                   )}
                 />
               ))}
@@ -221,7 +241,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Modals */}
       <AddContentDia
         addContentOpen={addContentOpen}
         setAddContentOpen={setAddContentOpen}

@@ -3,13 +3,12 @@ import Button from "./Button";
 import ShareIcon from "../icons/ShareIcon";
 import SideBarItems from "./SideBarItems";
 import YoutubeIcon from "../icons/YoutubeIcon";
-import TwitterIcon from "../icons/TwitterIcon";
-import Reddit from "../icons/Reddit";
-import Pinterest from "../icons/Pinterest";
-import Spotify from "../icons/Spotify";
+import DocumentIcon from "../icons/DocumentIcon";
+import ArticleIcon from "../icons/ArticleIcon";
+import PhotoIcon from "../icons/PhotoIcon";
+import TableIcon from "../icons/TableIcon";
 import PlusIcon from "../icons/PlusIcon";
 import UserProfileDropdown from "./UserProfileDropdown";
-
 
 interface HamburgerMenuProps {
   setShareModalOpen: (open: boolean) => void;
@@ -54,7 +53,7 @@ const HamburgerMenu = ({
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="flex flex-col justify-center items-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="flex flex-col justify-center items-center w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
         aria-label="Toggle menu"
         aria-expanded={hmOpen}
       >
@@ -78,7 +77,7 @@ const HamburgerMenu = ({
       {/* Mobile Dropdown Menu */}
       <div
         className={`
-          absolute top-12 right-0 w-56 bg-white rounded-lg shadow-lg border border-gray-200 
+          absolute top-12 right-0 w-56 bg-white rounded-lg shadow-lg border border-slate-200 
           transform transition-all duration-200 origin-top-right z-50
           ${
             hmOpen
@@ -88,7 +87,7 @@ const HamburgerMenu = ({
         `}
       >
         <div className="py-2">
-          <div className="px-2 pb-2">
+          <div className="px-2 pb-2 pt-2">
             <Button
               className="w-full mb-2"
               size="lg"
@@ -109,38 +108,45 @@ const HamburgerMenu = ({
             <SideBarItems
               icon={<YoutubeIcon size="lg" />}
               text={"Youtube"}
-              className="hover:bg-blue-200"
+              className="hover:bg-slate-100"
               setFilter={setFilter}
               value="youtube"
+              setHmOpen={setHmOpen}
+            />
+
+            <SideBarItems
+              icon={<ArticleIcon size="md" />}
+              text={"Articles"}
+              className="hover:bg-slate-100"
+              setFilter={setFilter}
+              value="article"
+              setHmOpen={setHmOpen}
             />
             <SideBarItems
-              icon={<TwitterIcon size="lg" />}
-              text={"Tweets"}
-              className="hover:bg-blue-200"
+              icon={<DocumentIcon size="lg" />}
+              text={"PDFs"}
+              className="hover:bg-slate-100"
               setFilter={setFilter}
-              value="twitter"
+              value="pdf"
+              setHmOpen={setHmOpen}
             />
             <SideBarItems
-              icon={<Reddit size="lg" />}
-              text={"Reddit"}
-              className="hover:bg-blue-200"
+              icon={<PhotoIcon size="md" />}
+              text={"Images"}
+              className="hover:bg-slate-100"
               setFilter={setFilter}
-              value="reddit"
+              value="image"
+              setHmOpen={setHmOpen}
             />
             <SideBarItems
-              icon={<Pinterest size="lg" />}
-              text={"Pinterest"}
-              className="hover:bg-blue-200"
+              icon={<TableIcon size="md" />}
+              text={"Spreadsheets"}
+              className="hover:bg-slate-100"
               setFilter={setFilter}
-              value="pinterest"
+              value="spreadsheets"
+              setHmOpen={setHmOpen}
             />
-            <SideBarItems
-              icon={<Spotify size="lg" />}
-              text={"Spotify"}
-              className="hover:bg-blue-200"
-              setFilter={setFilter}
-              value="spotify"
-            />
+
             <UserProfileDropdown />
           </div>
         </div>
