@@ -6,7 +6,7 @@ import YoutubeIcon from "../icons/YoutubeIcon";
 import DocumentIcon from "../icons/DocumentIcon";
 import ArticleIcon from "../icons/ArticleIcon";
 import PhotoIcon from "../icons/PhotoIcon";
-import TableIcon from "../icons/TableIcon";
+
 import PlusIcon from "../icons/PlusIcon";
 import UserProfileDropdown from "./UserProfileDropdown";
 
@@ -136,14 +136,6 @@ const HamburgerMenu = ({
               className="hover:bg-slate-100"
               setFilter={setFilter}
               value="image"
-              setHmOpen={setHmOpen}
-            />
-            <SideBarItems
-              icon={<TableIcon size="md" />}
-              text={"Spreadsheets"}
-              className="hover:bg-slate-100"
-              setFilter={setFilter}
-              value="spreadsheets"
               setHmOpen={setHmOpen}
             />
 

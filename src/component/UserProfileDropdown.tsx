@@ -138,7 +138,7 @@ const UserProfileDropdown = () => {
 
           <div className="py-1">
             <div
-              className="flex items-center gap-3 p-3 cursor-pointer hover:bg-slate-100 transition-colors"
+              className="flex items-center gap-3 p-3 cursor-pointer hover:bg-purple-50 transition-colors duration-150"
               onClick={() => {
                 navigate("/settings");
                 setIsOpen(false);
@@ -148,7 +148,7 @@ const UserProfileDropdown = () => {
               <span className="text-slate-700">Settings</span>
             </div>
             <div
-              className="flex items-center gap-3 p-3 cursor-pointer hover:bg-slate-100 transition-colors"
+              className="flex items-center gap-3 p-3 cursor-pointer hover:bg-purple-50 transition-colors duration-150"
               onClick={handleLogout}
             >
               <LogoutIcon size="md" />

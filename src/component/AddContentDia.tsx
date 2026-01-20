@@ -33,7 +33,6 @@ const dropdownOptions = [
   { label: "PDF", value: "pdf" },
   { label: "Document", value: "doc" },
   { label: "Image", value: "image" },
-  { label: "Spreadsheet", value: "spreadsheets" },
 ];
 
 const AddContentDia = ({
@@ -77,9 +76,7 @@ const AddContentDia = ({
       return;
     }
 
-    const isFileRequired = ["pdf", "doc", "image", "spreadsheets"].includes(
-      contentType,
-    );
+    const isFileRequired = ["pdf", "doc", "image"].includes(contentType);
     if (isFileRequired && !file) {
       showToast("Please upload a file", "warning");
       return;
@@ -150,14 +147,13 @@ const AddContentDia = ({
   }, [addContentOpen, setAddContentOpen]);
 
   const isFileInput =
-    optionType &&
-    ["pdf", "doc", "image", "spreadsheets"].includes(optionType.value);
+    optionType && ["pdf", "doc", "image"].includes(optionType.value);
 
   return (
     <div>
       {addContentOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500/40 w-full h-full z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full md:w-1/3 p-6 max-h-[90%] overflow-y-auto opacity-100 ">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm w-full h-full z-50">
+          <div className="bg-white rounded-2xl shadow-2xl w-full md:w-1/3 p-6 max-h-[90%] overflow-y-auto opacity-100 transform transition-all duration-200">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold mb-4">Add New Content</h2>
               <CrossIcon

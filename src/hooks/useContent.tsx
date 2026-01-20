@@ -10,7 +10,7 @@ export interface ChatMessage {
 export interface Content {
   _id: string;
   title: string;
-  contentType: "youtube" | "pdf" | "doc" | "image" | "spreadsheets" | "article";
+  contentType: "youtube" | "pdf" | "doc" | "image" | "article";
   link: string;
   createdAt: string;
   aiChat?: ChatMessage[];

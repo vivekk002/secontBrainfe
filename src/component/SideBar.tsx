@@ -1,7 +1,7 @@
 import YoutubeIcon from "../icons/YoutubeIcon";
 import DocumentIcon from "../icons/DocumentIcon";
 import PhotoIcon from "../icons/PhotoIcon";
-import TableIcon from "../icons/TableIcon";
+
 import ArticleIcon from "../icons/ArticleIcon";
 import SideBarItems from "./SideBarItems";
 import UserProfileDropdown from "./UserProfileDropdown";
@@ -43,13 +43,7 @@ const Sidebar = ({ setFilter }: SidebarProps) => {
           setFilter={setFilter}
           value="image"
         />
-        <SideBarItems
-          icon={<TableIcon size="md" />}
-          text={"Spreadsheets"}
-          className="hover:bg-slate-100 ml-4 mr-4 w-60 text-slate-700"
-          setFilter={setFilter}
-          value="spreadsheets"
-        />
+
         <SideBarItems
           icon={<DocumentIcon size="lg" />}
           text={"Docs"}

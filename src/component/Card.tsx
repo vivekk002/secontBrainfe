@@ -11,7 +11,6 @@ import Youtube from "../embeds/Youtube";
 import DocumentIcon from "../icons/DocumentIcon";
 import LinkIcon from "../icons/LinkIcon";
 import BrainIcon from "../icons/BrainIcon";
-import GoogleDocsViewer from "./GoogleDocsViewer";
 
 type Tag = {
   _id: string;
@@ -24,7 +23,7 @@ interface CardProps {
   createdAt: string;
   tags: Tag[];
   link: string;
-  contentType: "youtube" | "pdf" | "doc" | "image" | "spreadsheets" | "article";
+  contentType: "youtube" | "pdf" | "doc" | "image" | "article";
   _id: string;
   onDelete?: () => void;
   isSharedView?: boolean;
@@ -109,25 +108,46 @@ const Card = ({
   const renderContent = () => {
     switch (contentType) {
       case "youtube":
-        return <Youtube url={link} />;
+        return (
+          <div className="w-full h-[200px] bg-slate-50 rounded-lg overflow-hidden">
+            <Youtube url={link} />
+          </div>
+        );
       case "image":
         return (
-          <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-lg overflow-hidden">
+          <div className="w-full h-[200px] flex items-center justify-center bg-slate-50 rounded-lg overflow-hidden">
             <img
               src={link}
               alt={title}
-              className="max-w-full max-h-[200px] object-contain"
+              className="max-w-full max-h-full object-contain"
             />
           </div>
         );
       case "pdf":
-        // For PDFs, try Cloudinary thumbnail first, then fallback to Google Docs Viewer
-        const isCloudinaryPdf = link.includes("cloudinary.com");
+      case "doc":
+        // Both PDFs and Office documents (which are converted to PDF) use the same rendering
+        const isCloudinaryFile = link.includes("cloudinary.com");
 
-        if (isCloudinaryPdf) {
-          const pdfThumbnail = link
-            .replace("/upload/", "/upload/w_300,h_400,c_fill,pg_1/")
-            .replace(/\.[^/.]+$/, ".jpg");
+        if (isCloudinaryFile) {
+          // Generate thumbnail from the PDF
+          // Cloudinary URL format: https://res.cloudinary.com/{cloud_name}/{resource_type}/upload/{transformations}/{public_id}.{format}
+          let pdfThumbnail = link;
+
+          // Check if the URL contains /upload/
+          if (link.includes("/upload/")) {
+            // Insert transformation parameters after /upload/
+            pdfThumbnail = link.replace(
+              "/upload/",
+              "/upload/w_300,h_400,c_fill,pg_1,f_jpg/",
+            );
+
+            // Replace the file extension with .jpg
+            // Handle both .pdf and other extensions
+            pdfThumbnail = pdfThumbnail.replace(
+              /\.(pdf|docx?|xlsx?|pptx?)$/i,
+              ".jpg",
+            );
+          }
 
           return (
             <div className="w-full h-[200px] flex items-center justify-center bg-slate-50 rounded-lg overflow-hidden relative">
@@ -143,10 +163,10 @@ const Card = ({
                   if (fallback) fallback.classList.remove("hidden");
                 }}
               />
-              <div className="hidden absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+              <div className="hidden absolute inset-0 flex flex-col items-center justify-center p-4 text-center bg-slate-50">
                 <DocumentIcon size="lg" className="text-slate-400 mb-2" />
                 <p className="text-sm text-slate-500 font-medium mb-2">
-                  PDF File
+                  {contentType === "pdf" ? "PDF File" : "Document"}
                 </p>
                 <p className="text-xs text-slate-400">Click to view</p>
               </div>
@@ -154,43 +174,27 @@ const Card = ({
           );
         }
 
-        // Non-Cloudinary PDF - show icon
+        // Non-Cloudinary file - show icon
         return (
-          <div className="flex flex-col items-center justify-center h-48 bg-slate-50 rounded-lg p-4 text-center">
+          <div className="w-full h-[200px] flex flex-col items-center justify-center bg-slate-50 rounded-lg p-4 text-center">
             <DocumentIcon size="lg" className="text-slate-400 mb-2" />
-            <p className="text-sm text-slate-500 font-medium mb-2">PDF File</p>
+            <p className="text-sm text-slate-500 font-medium mb-2">
+              {contentType === "pdf" ? "PDF File" : "Document"}
+            </p>
             <p className="text-xs text-slate-400">Click to view</p>
-          </div>
-        );
-
-      case "doc":
-      case "spreadsheets":
-        // Show preview using Google Docs Viewer for Office files
-        return (
-          <div className="w-full h-[200px] bg-slate-50 rounded-lg overflow-hidden relative">
-            <GoogleDocsViewer
-              fileUrl={link}
-              fileName={title}
-              height="200px"
-              className="w-full h-full"
-            />
-            {/* Overlay with icon for better UX */}
-            {/* <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-sm">
-              <DocumentIcon size="sm" className="text-purple-600" />
-            </div> */}
           </div>
         );
 
       case "article":
         // For articles, show a preview card with link
         return (
-          <div className="p-3">
-            <div className="bg-slate-100 p-4 rounded-lg flex flex-col gap-2">
+          <div className="w-full h-[200px] flex items-center justify-center bg-slate-50 rounded-lg p-4">
+            <div className="w-full flex flex-col gap-3">
               <div className="flex items-center gap-2 text-slate-600">
                 <LinkIcon size="md" />
                 <span className="capitalize font-medium">Article Link</span>
               </div>
-              <p className="text-blue-600 hover:underline break-all text-sm line-clamp-2">
+              <p className="text-blue-600 hover:underline break-all text-sm line-clamp-4">
                 {link}
               </p>
             </div>
@@ -200,15 +204,15 @@ const Card = ({
       default:
         // Generic content
         return (
-          <div className="p-3">
-            <div className="bg-slate-100 p-4 rounded-lg flex flex-col gap-2">
+          <div className="w-full h-[200px] flex items-center justify-center bg-slate-50 rounded-lg p-4">
+            <div className="w-full flex flex-col gap-3">
               <div className="flex items-center gap-2 text-slate-600">
                 <LinkIcon size="md" />
                 <span className="capitalize font-medium">
                   {contentType} Link
                 </span>
               </div>
-              <p className="text-blue-600 hover:underline break-all text-sm line-clamp-2">
+              <p className="text-blue-600 hover:underline break-all text-sm line-clamp-4">
                 {link}
               </p>
             </div>
@@ -226,15 +230,13 @@ const Card = ({
   return (
     <div
       onClick={handleCardClick}
-      className="cursor-pointer bg-white rounded-lg border border-slate-200 p-4 mt-4 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between w-full h-full relative group"
+      className="cursor-pointer bg-white rounded-lg border border-slate-200 p-4 mt-4 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col justify-between w-full h-full relative group"
     >
       <div>
         <header className="flex justify-between items-start mb-3">
           <div className="flex items-center gap-2 max-w-[80%]">
             <div className="p-2 bg-purple-50 rounded-lg text-purple-600 shrink-0">
-              {["pdf", "doc", "spreadsheets", "article"].includes(
-                contentType,
-              ) ? (
+              {["pdf", "doc", "article"].includes(contentType) ? (
                 <DocumentIcon size="md" />
               ) : (
                 <LinkIcon size="md" />

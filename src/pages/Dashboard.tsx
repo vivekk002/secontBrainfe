@@ -22,7 +22,7 @@ type Content = {
   _id: string;
   title: string;
   link: string;
-  contentType: "youtube" | "pdf" | "doc" | "image" | "spreadsheets" | "article";
+  contentType: "youtube" | "pdf" | "doc" | "image" | "article";
   createdAt: string;
 };
 
@@ -107,14 +107,14 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600">
       <header
         className="
         w-full flex items-center justify-between
         px-4 md:px-8 py-4 md:py-5
         bg-white
         border-b-2 border-slate-200
-        shadow-sm
+        shadow-lg
         transition-all duration-200
       "
       >
@@ -215,7 +215,7 @@ const Dashboard = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar setFilter={setFilter} />
 
-        <div className="flex-1 bg-slate-50 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <section className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-3 md:p-4 overflow-auto">
             {content
               .filter(

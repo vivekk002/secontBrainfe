@@ -105,12 +105,12 @@ const ProfileSettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <div className="bg-white shadow">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex flex-col">
+      <div className="bg-white shadow-lg">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-purple-600 transition-colors duration-150"
           >
             &larr; Back
           </button>
@@ -119,7 +119,7 @@ const ProfileSettings = () => {
       </div>
 
       <div className="max-w-2xl mx-auto w-full px-4 py-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
           {loading ? (
             <div className="text-center py-10">Loading profile...</div>
           ) : (
@@ -200,7 +200,7 @@ const ProfileSettings = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className={`px-8 py-3 text-lg bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-all duration-300 ease-in-out ${
+                  className={`px-8 py-3 text-lg bg-purple-600 text-white hover:bg-purple-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ${
                     saving ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
                   }`}
                 >
