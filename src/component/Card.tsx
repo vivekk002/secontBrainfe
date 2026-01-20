@@ -230,7 +230,7 @@ const Card = ({
   return (
     <div
       onClick={handleCardClick}
-      className="cursor-pointer bg-white rounded-lg border border-slate-200 p-4 mt-4 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col justify-between w-full h-full relative group"
+      className="cursor-pointer bg-gradient-to-br from-white via-blue-50 to-purple-50 rounded-lg border border-slate-200 p-4 mt-4 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 flex flex-col justify-between w-full h-full relative group"
     >
       <div>
         <header className="flex justify-between items-start mb-3">

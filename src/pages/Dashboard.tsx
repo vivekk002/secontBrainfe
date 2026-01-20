@@ -112,7 +112,7 @@ const Dashboard = () => {
         className="
         w-full flex items-center justify-between
         px-4 md:px-8 py-4 md:py-5
-        bg-white
+        bg-gradient-to-r from-blue-50 to-purple-50
         border-b-2 border-slate-200
         shadow-lg
         transition-all duration-200
