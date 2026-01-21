@@ -57,7 +57,7 @@ const SingUp = () => {
       {/* Left Side - Welcome Section */}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
         <div className="max-w-lg text-white">
-          <h1 className="text-5xl font-bold mb-6">Welcome to Second Brain</h1>
+          <h1 className="text-5xl font-bold mb-6">Welcome to MindVault</h1>
           <p className="text-lg text-blue-100 leading-relaxed">
             Your personal knowledge management system. Save, organize, and
             access all your important content in one place. From articles and

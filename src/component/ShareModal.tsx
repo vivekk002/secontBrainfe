@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CrossIcon from "../icons/CrossIcon";
 import Button from "./Button";
 import { shareBrain, unshareBrain, copyToClipboard } from "../utils/share";
@@ -16,6 +16,29 @@ const ShareModal = ({ open, setOpen }: ShareModalProps) => {
   const [isShared, setIsShared] = useState(false);
   const { toast, showToast, hideToast } = useToast();
 
+  useEffect(() => {
+    if (open) {
+      const checkStatus = async () => {
+        setIsLoading(true);
+        try {
+          // Import getShareStatus dynamically or use axios directly if circular dependency
+          // Assuming getShareStatus is exported from same file as shareBrain
+          const { getShareStatus } = await import("../utils/share");
+          const status = await getShareStatus();
+          setIsShared(status.isShared);
+          if (status.shareLink) {
+            setShareLink(status.shareLink);
+          }
+        } catch (e) {
+          console.error("Failed to check status", e);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      checkStatus();
+    }
+  }, [open]);
+
   const handleShare = async () => {
     setIsLoading(true);
     try {
@@ -23,7 +46,8 @@ const ShareModal = ({ open, setOpen }: ShareModalProps) => {
       if (link) {
         setShareLink(link);
         setIsShared(true);
-        showToast("Brain shared successfully!", "success");
+        await copyToClipboard(link); // Auto copy
+        showToast("Brain shared and link copied!", "success");
       } else {
         showToast("Failed to generate share link", "error");
       }

@@ -53,7 +53,7 @@ export const shareContent = async (
       // Try to use native share API first
       if (navigator.share) {
         await navigator.share({
-          title: "Shared from Second Brain",
+          title: "Shared from MindVault",
           text: "Check out this content I found interesting!",
           url: publicUrl,
         });

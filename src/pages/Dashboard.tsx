@@ -160,8 +160,11 @@ const Dashboard = () => {
             tracking-tight
           "
           >
-            Second Brain
+            MindVault
           </h1>
+          <span className="hidden md:block text-xs text-center text-gray-500 font-medium tracking-wider uppercase mt-1">
+            AI Document Organizer
+          </span>
 
           <h2
             className="

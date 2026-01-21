@@ -99,7 +99,7 @@ const SharedBrain = () => {
               <BrainiIcon size="md" />
               <div>
                 <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                  Second Brain
+                  MindVault
                 </h1>
                 <p className="text-sm text-slate-600 hidden md:block">
                   Shared by {ownerName}
@@ -179,11 +179,11 @@ const SharedBrain = () => {
           <p className="text-slate-600 text-sm">
             Powered by{" "}
             <span className="font-semibold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Second Brain
+              MindVault
             </span>
           </p>
           <p className="text-slate-500 text-xs mt-2">
-            Want your own Second Brain?{" "}
+            Want your own MindVault?{" "}
             <a
               href="/signup"
               className="text-purple-600 hover:text-purple-700 font-semibold"
