@@ -107,11 +107,19 @@ const AddContentDia = ({
         formData.append("link", link);
       }
 
-      await axios.post(`${BACKEND_URL}/content`, formData, {
+      const response = await axios.post(`${BACKEND_URL}/content`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showToast("Content added successfully", "success");
+      if (response.data.warning) {
+        showToast(response.data.warning, "warning");
+        setTimeout(() => {
+          showToast("Content added successfully", "success");
+        }, 6000);
+      } else {
+        showToast("Content added successfully", "success");
+      }
+
       setLoading(false);
       setAddContentOpen(false);
       if (onContentAdded) {
